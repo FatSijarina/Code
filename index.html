@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPARQL App</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header class="landing-header">
+        <img src="assets/book.png" alt="App Logo" class="logo" style="width: 100px;">
+        <h1>Welcome to the SPARQL App</h1>
+        <p>Explore and interact with semantic data from various domains.</p>
+    </header>
+
+    <main>
+        <section class="landing-section">
+            <div class="card" onclick="navigateTo('papers')">
+                <img src="assets/paper.png" alt="Papers" />
+                <h2>Papers</h2>
+                <p>Explore published papers and their details.</p>
+            </div>
+            <div class="card" onclick="navigateTo('awards')">
+                <img src="assets/award.png" alt="Awards" />
+                <h2>Awards</h2>
+                <p>View awards and their recipients.</p>
+            </div>
+            <div class="card" onclick="navigateTo('authors')">
+                <img src="assets/writer.png" alt="Authors" />
+                <h2>Authors</h2>
+                <p>Discover authors and their contributions.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 SPARQL App</p>
+    </footer>
+
+    <script>
+        function navigateTo(tab) {
+            window.location.href = `${tab}.html`;
+        }
+    </script>
+</body>
+</html>

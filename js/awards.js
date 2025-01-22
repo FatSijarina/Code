@@ -54,6 +54,27 @@ function displayAwards(data) {
     });
 }
 
+function filterTable() {
+    const input = document.getElementById("searchInput");
+    const filter = input.value.toLowerCase();
+    const table = document.querySelector("table");
+    const rows = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < rows.length; i++) { // Skip the header row
+        const cells = rows[i].getElementsByTagName("td");
+        let match = false;
+
+        for (let j = 0; j < cells.length; j++) {
+            if (cells[j].innerText.toLowerCase().includes(filter)) {
+                match = true;
+                break;
+            }
+        }
+
+        rows[i].style.display = match ? "" : "none";
+    }
+}
+
 function displayError(message) {
     const tableBody = document.getElementById("awardsTableBody");
     const tr = document.createElement("tr");

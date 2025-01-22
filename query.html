@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom SPARQL Query</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Custom SPARQL Query</h1>
+        <p>Write and execute your own SPARQL queries below.</p>
+    </header>
+
+    <main>
+        <section id="querySection">
+            <textarea id="sparqlQuery" rows="10" cols="80">
+                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+                PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                PREFIX mo: <http://www.papersontology.org/>
+                
+                SELECT ?authorName ?institutionName ?researchField
+                WHERE {
+                    ?author rdf:type mo:Author ;
+                            mo:hasName ?authorName ;
+                            mo:affiliatedWith ?institution ;
+                            mo:hasResearchField ?field .
+                    ?institution mo:hasName ?institutionName .
+                    ?field mo:hasResearchFieldName ?researchField .
+                }
+                ORDER BY ?authorName
+            </textarea>
+            <button id="executeQuery" onclick="executeCustomQuery()">Run Query</button>
+        </section>
+
+        <section id="resultsSection">
+            <h2>Results</h2>
+            <table id="queryResults">
+                <thead id="resultsHeader"></thead>
+                <tbody id="resultsBody"></tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 SPARQL App</p>
+    </footer>
+
+    <script>
+        const endpoint = "http://localhost:3030/publications_dataset/sparql";
+
+        async function executeCustomQuery() {
+            const query = document.getElementById("sparqlQuery").value;
+
+            if (!query.trim()) {
+                alert("Please enter a SPARQL query.");
+                return;
+            }
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: `query=${encodeURIComponent(query)}`,
+                });
+
+                if (!response.ok) {
+                    throw new Error(`SPARQL query failed with status ${response.status}`);
+                }
+
+                const json = await response.json();
+                displayResults(json);
+            } catch (error) {
+                console.error("Error executing query:", error.message);
+                alert("An error occurred while executing the query. Please check the query syntax or the endpoint.");
+            }
+        }
+
+        function displayResults(data) {
+            const resultsHeader = document.getElementById("resultsHeader");
+            const resultsBody = document.getElementById("resultsBody");
+
+            resultsHeader.innerHTML = "";
+            resultsBody.innerHTML = "";
+
+            if (!data.results.bindings.length) {
+                const row = document.createElement("tr");
+                const cell = document.createElement("td");
+                cell.colSpan = 5; // Adjust as needed
+                cell.textContent = "No results found.";
+                row.appendChild(cell);
+                resultsBody.appendChild(row);
+                return;
+            }
+
+            const headers = Object.keys(data.results.bindings[0]);
+            const headerRow = document.createElement("tr");
+            headers.forEach((header) => {
+                const th = document.createElement("th");
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+            resultsHeader.appendChild(headerRow);
+
+            data.results.bindings.forEach((binding) => {
+                const row = document.createElement("tr");
+                headers.forEach((header) => {
+                    const cell = document.createElement("td");
+                    cell.textContent = binding[header]?.value || "N/A";
+                    row.appendChild(cell);
+                });
+                resultsBody.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>

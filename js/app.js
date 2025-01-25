@@ -1,7 +1,7 @@
 document.getElementById("runQueryButton").addEventListener("click", runQuery);
 document.getElementById("predefinedQueriesButton").addEventListener("click", loadPredefinedQueries);
 
-const endpoint = "http://localhost:3030/publications_dataset/sparql";
+const endpoint = "http://localhost:3030/publications_dataset1/sparql";
 
 async function runQuery() {
     const sparqlQuery = document.getElementById("sparqlQuery").value;

@@ -1,4 +1,4 @@
-const endpoint = "http://localhost:3030/publications_dataset/sparql";
+const endpoint = "http://localhost:3030/publications_dataset1/sparql";
 async function fetchAuthors() {
     const query = `
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>

@@ -1,4 +1,4 @@
-const endpoint = "http://localhost:3030/publications_dataset/sparql";
+const endpoint = "http://localhost:3030/publications_dataset1/sparql";
 
 async function fetchPapers() {
     const query = `
